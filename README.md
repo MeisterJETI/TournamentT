@@ -43,4 +43,4 @@ Das Ranking zeigt die aktuelle Punkteverteilung und Platzierungen aller Teams:
 ---
 
 ## Lizenz
-Mach mit dem Code was auch immer du willst! Credit wär cool, aber nicht notwendig
+Mach mit dem Code was auch immer du willst! Credit wär cool, aber nicht notwendig.
