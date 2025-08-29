@@ -42,12 +42,5 @@ Das Ranking zeigt die aktuelle Punkteverteilung und Platzierungen aller Teams:
 
 ---
 
-## Features
-- Live-Scoreboard
-- Anzeigenamen der Gruppen kann geändert werden (z.B. von Gruppe A zu Team Elefant)
-- Database die alles speichert, falls System ausfällt/abstürzt.
-- Nach ausfall läd das Programm die Database automatisch.
-- Dank sockit.io ist das system EXTREMST schnell und zuverlässig (keine Wartezeit spürbar).
-
 ## Lizenz
 Mach mit dem Code was auch immer du willst! Credit wär cool, aber nicht notwendig
