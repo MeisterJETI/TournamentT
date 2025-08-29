@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Station {{ station }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"> <!-- wichtig fürs Handy -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 10px;
+            background: #f9f9f9;
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .match-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            margin-bottom: 15px;
+            padding: 15px;
+        }
+        .round {
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .fighters {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+        .fighter {
+            flex: 1;
+            text-align: center;
+            font-size: 1.1em;
+        }
+        .checkbox {
+            flex: 0 0 50px;
+            display: flex;
+            justify-content: center;
+        }
+        input[type="checkbox"] {
+            width: 28px;
+            height: 28px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Station {{ station }}</h2>
+
+    {% for r in rounds %}
+    <div class="match-card">
+        <div class="round">{{ r.round }}</div>
+        <div class="fighters">
+            <div class="fighter">{{ r.f1 }}</div>
+            <div class="checkbox">
+                <input type="checkbox" class="cb"
+                       data-round="{{ r.round }}" data-winner="{{ r.match.fighter1 }}"
+                       {% if r.match.winner == r.match.fighter1 %}checked{% endif %}>
+            </div>
+            <div class="checkbox">
+                <input type="checkbox" class="cb"
+                       data-round="{{ r.round }}" data-winner="{{ r.match.fighter2 }}"
+                       {% if r.match.winner == r.match.fighter2 %}checked{% endif %}>
+            </div>
+            <div class="fighter">{{ r.f2 }}</div>
+        </div>
+    </div>
+    {% endfor %}
+
+    <script>
+        const station = "{{ station }}";
+        const checkboxes = document.querySelectorAll(".cb");
+
+        checkboxes.forEach(cb => {
+            cb.addEventListener("change", () => {
+                const round = cb.dataset.round;
+                const winner = cb.checked ? cb.dataset.winner : "";
+
+                // andere Checkbox derselben Runde deaktivieren
+                checkboxes.forEach(other => {
+                    if (other !== cb && other.dataset.round === round) {
+                        other.checked = false;
+                    }
+                });
+
+                fetch("/update_winner", {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({station, round, winner})
+                });
+            });
+        });
+
+        // Live Update
+        const evtSource = new EventSource("/events");
+        evtSource.onmessage = function(e) {
+            if (e.data === "update") {
+                location.reload();
+            }
+        };
+    </script>
+</body>
+</html>

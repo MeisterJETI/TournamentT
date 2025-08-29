@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Inhaltsverzeichnis</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background: #f9f9f9; }
+        h1, h2 { text-align: center; margin-bottom: 15px; }
+        .section { margin-bottom: 30px; }
+        .links { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+        .links a {
+            display: block;
+            padding: 12px 20px;
+            background: #007BFF;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            text-align: center;
+            min-width: 120px;
+        }
+        .links a:hover { background: #0056b3; }
+    </style>
+</head>
+<body>
+    <h1>Inhaltsverzeichnis</h1>
+
+    <div class="section">
+        <h2>Stationen</h2>
+        <div class="links">
+            {% for station, name in stations %}
+            <a href="/station/{{ station }}">{{ name }}</a>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Gruppen</h2>
+        <div class="links">
+            {% for group, name in groups %}
+            <a href="/group/{{ group }}">{{ name }}</a>
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Live Ranking</h2>
+        <div class="links">
+            <a href="/ranking">Ranking ansehen</a>
+        </div>
+    </div>
+	
+	<p style="text-align: center;">by MeisterJETI</p>
+</body>
+</html>

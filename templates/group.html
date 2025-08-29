@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ group_name }} – Übersicht</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background: #f9f9f9; }
+        h2 { text-align: center; margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; background: white; }
+        th, td { padding: 12px; text-align: center; border-bottom: 1px solid #ddd; }
+        th { background: #eee; }
+        .won { background: #dff0d8; }
+        .lost { background: #f2dede; }
+        .open { background: #fcf8e3; }
+    </style>
+</head>
+<body>
+    <h2>📋 Übersicht für {{ group_name }}</h2>
+    <table>
+        <tr><th>Station</th><th>Gegner</th><th>Status</th></tr>
+        {% for entry in history %}
+        <tr class="{% if 'gewonnen' in entry.status %}won{% elif 'verloren' in entry.status %}lost{% else %}open{% endif %}">
+            <td>{{ entry.station }}</td>
+            <td>{{ entry.opponent }}</td>
+            <td>{{ entry.status }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <script>
+        // Live Update
+        const evtSource = new EventSource("/events");
+        evtSource.onmessage = function(e) {
+            if (e.data === "update") {
+                location.reload();
+            }
+        };
+    </script>
+</body>
+</html>

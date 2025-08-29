@@ -1,0 +1,378 @@
+{
+    "Round 1": [
+        {
+            "ID": "game 1",
+            "Station": "S1",
+            "fighter1": "G1",
+            "fighter2": "G7",
+            "finished": "0",
+            "winner": ""
+        },
+        {
+            "ID": "game 2",
+            "Station": "S2",
+            "fighter1": "G2",
+            "fighter2": "G8",
+            "finished": "0",
+            "winner": ""
+        },
+        {
+            "ID": "game 3",
+            "Station": "S3",
+            "fighter1": "G3",
+            "fighter2": "G9",
+            "finished": "0",
+            "winner": ""
+        },
+        {
+            "ID": "game 4",
+            "Station": "S4",
+            "fighter1": "G4",
+            "fighter2": "G10",
+            "finished": "1",
+            "winner": "G10"
+        },
+        {
+            "ID": "game 5",
+            "Station": "S5",
+            "fighter1": "G5",
+            "fighter2": "G11",
+            "finished": "1",
+            "winner": "G5"
+        },
+        {
+            "ID": "game 6",
+            "Station": "S6",
+            "fighter1": "G6",
+            "fighter2": "G12",
+            "finished": "0",
+            "winner": ""
+        }
+    ],
+    "Round 2": [
+        {
+            "ID": "game 1",
+            "Station": "S1",
+            "fighter1": "G6",
+            "fighter2": "G8",
+            "finished": "0",
+            "winner": ""
+        },
+        {
+            "ID": "game 2",
+            "Station": "S2",
+            "fighter1": "G1",
+            "fighter2": "G9",
+            "finished": "0",
+            "winner": ""
+        },
+        {
+            "ID": "game 3",
+            "Station": "S3",
+            "fighter1": "G2",
+            "fighter2": "G10",
+            "finished": "0",
+            "winner": ""
+        },
+        {
+            "ID": "game 4",
+            "Station": "S4",
+            "fighter1": "G3",
+            "fighter2": "G11",
+            "finished": "1",
+            "winner": "G11"
+        },
+        {
+            "ID": "game 5",
+            "Station": "S5",
+            "fighter1": "G4",
+            "fighter2": "G12",
+            "finished": "1",
+            "winner": "G4"
+        },
+        {
+            "ID": "game 6",
+            "Station": "S6",
+            "fighter1": "G5",
+            "fighter2": "G7",
+            "finished": "0",
+            "winner": ""
+        }
+    ],
+    "Round 3": [
+        {
+            "ID": "game 1",
+            "Station": "S1",
+            "fighter1": "G5",
+            "fighter2": "G9",
+            "finished": "0",
+            "winner": ""
+        },
+        {
+            "ID": "game 2",
+            "Station": "S2",
+            "fighter1": "G6",
+            "fighter2": "G10",
+            "finished": "0",
+            "winner": ""
+        },
+        {
+            "ID": "game 3",
+            "Station": "S3",
+            "fighter1": "G1",
+            "fighter2": "G11",
+            "finished": "0",
+            "winner": ""
+        },
+        {
+            "ID": "game 4",
+            "Station": "S4",
+            "fighter1": "G2",
+            "fighter2": "G12",
+            "finished": "1",
+            "winner": "G12"
+        },
+        {
+            "ID": "game 5",
+            "Station": "S5",
+            "fighter1": "G6",
+            "fighter2": "G7",
+            "finished": "1",
+            "winner": "G7"
+        },
+        {
+            "ID": "game 6",
+            "Station": "S6",
+            "fighter1": "G4",
+            "fighter2": "G8",
+            "finished": "0",
+            "winner": ""
+        }
+    ],
+    "Round 4": [
+        {
+            "ID": "game 1",
+            "Station": "S1",
+            "fighter1": "G4",
+            "fighter2": "G10",
+            "finished": "0",
+            "winner": ""
+        },
+        {
+            "ID": "game 2",
+            "Station": "S2",
+            "fighter1": "G5",
+            "fighter2": "G11",
+            "finished": "0",
+            "winner": ""
+        },
+        {
+            "ID": "game 3",
+            "Station": "S3",
+            "fighter1": "G6",
+            "fighter2": "G12",
+            "finished": "0",
+            "winner": ""
+        },
+        {
+            "ID": "game 4",
+            "Station": "S4",
+            "fighter1": "G1",
+            "fighter2": "G7",
+            "finished": "1",
+            "winner": "G7"
+        },
+        {
+            "ID": "game 5",
+            "Station": "S5",
+            "fighter1": "G2",
+            "fighter2": "G8",
+            "finished": "1",
+            "winner": "G8"
+        },
+        {
+            "ID": "game 6",
+            "Station": "S6",
+            "fighter1": "G3",
+            "fighter2": "G9",
+            "finished": "0",
+            "winner": ""
+        }
+    ],
+    "Round 5": [
+        {
+            "ID": "game 1",
+            "Station": "S1",
+            "fighter1": "G3",
+            "fighter2": "G11",
+            "finished": "0",
+            "winner": ""
+        },
+        {
+            "ID": "game 2",
+            "Station": "S2",
+            "fighter1": "G4",
+            "fighter2": "G12",
+            "finished": "0",
+            "winner": ""
+        },
+        {
+            "ID": "game 3",
+            "Station": "S3",
+            "fighter1": "G5",
+            "fighter2": "G7",
+            "finished": "0",
+            "winner": ""
+        },
+        {
+            "ID": "game 4",
+            "Station": "S4",
+            "fighter1": "G6",
+            "fighter2": "G8",
+            "finished": "1",
+            "winner": "G8"
+        },
+        {
+            "ID": "game 5",
+            "Station": "S5",
+            "fighter1": "G1",
+            "fighter2": "G9",
+            "finished": "1",
+            "winner": "G9"
+        },
+        {
+            "ID": "game 6",
+            "Station": "S6",
+            "fighter1": "G2",
+            "fighter2": "G10",
+            "finished": "0",
+            "winner": ""
+        }
+    ],
+    "Round 6": [
+        {
+            "ID": "game 1",
+            "Station": "S1",
+            "fighter1": "G2",
+            "fighter2": "G12",
+            "finished": "0",
+            "winner": ""
+        },
+        {
+            "ID": "game 2",
+            "Station": "S2",
+            "fighter1": "G3",
+            "fighter2": "G7",
+            "finished": "0",
+            "winner": ""
+        },
+        {
+            "ID": "game 3",
+            "Station": "S3",
+            "fighter1": "G4",
+            "fighter2": "G8",
+            "finished": "0",
+            "winner": ""
+        },
+        {
+            "ID": "game 4",
+            "Station": "S4",
+            "fighter1": "G5",
+            "fighter2": "G9",
+            "finished": "1",
+            "winner": "G9"
+        },
+        {
+            "ID": "game 5",
+            "Station": "S5",
+            "fighter1": "G6",
+            "fighter2": "G10",
+            "finished": "1",
+            "winner": "G6"
+        },
+        {
+            "ID": "game 6",
+            "Station": "S6",
+            "fighter1": "G1",
+            "fighter2": "G11",
+            "finished": "0",
+            "winner": ""
+        }
+    ],
+    "Anzeigenahmen": [
+        {
+            "Gruppe": "G1",
+            "Anzeigename": "Gruppe A"
+        },
+        {
+            "Gruppe": "G2",
+            "Anzeigename": "Gruppe B"
+        },
+        {
+            "Gruppe": "G3",
+            "Anzeigename": "Gruppe C"
+        },
+        {
+            "Gruppe": "G4",
+            "Anzeigename": "Gruppe D"
+        },
+        {
+            "Gruppe": "G5",
+            "Anzeigename": "Gruppe E"
+        },
+        {
+            "Gruppe": "G6",
+            "Anzeigename": "Gruppe F"
+        },
+        {
+            "Gruppe": "G7",
+            "Anzeigename": "Gruppe G"
+        },
+        {
+            "Gruppe": "G8",
+            "Anzeigename": "Gruppe H"
+        },
+        {
+            "Gruppe": "G9",
+            "Anzeigename": "Gruppe I"
+        },
+        {
+            "Gruppe": "G10",
+            "Anzeigename": "Gruppe J"
+        },
+        {
+            "Gruppe": "G11",
+            "Anzeigename": "Gruppe K"
+        },
+        {
+            "Gruppe": "G12",
+            "Anzeigename": "Gruppe L"
+        }
+    ],
+    "AnzeigenahmenS": [
+        {
+            "Station": "S1",
+            "Anzeigename": "Völkerball"
+        },
+        {
+            "Station": "S2",
+            "Anzeigename": "Mattenberg"
+        },
+        {
+            "Station": "S3",
+            "Anzeigename": "Zeitfangen"
+        },
+        {
+            "Station": "S4",
+            "Anzeigename": "Parkour"
+        },
+        {
+            "Station": "S5",
+            "Anzeigename": "Schwammlauf"
+        },
+        {
+            "Station": "S6",
+            "Anzeigename": "Kreativ"
+        }
+    ]
+}

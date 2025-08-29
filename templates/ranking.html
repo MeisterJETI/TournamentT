@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Live Ranking</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; background: #f9f9f9; }
+        h2 { text-align: center; margin-bottom: 20px; }
+        table { width: 100%; border-collapse: collapse; background: white; }
+        th, td { padding: 12px; text-align: center; border-bottom: 1px solid #ddd; }
+        th { background: #eee; }
+        tr:first-child td { font-weight: bold; background: #dff0d8; } /* Spitzenreiter */
+    </style>
+</head>
+<body>
+    <h2>🏆 Live Ranking</h2>
+    <table id="ranking">
+        <tr><th>Gruppe</th><th>Siege</th></tr>
+        {% for name, wins in ranking %}
+        <tr><td>{{ name }}</td><td>{{ wins }}</td></tr>
+        {% endfor %}
+    </table>
+
+    <script>
+        function updateRanking() {
+            fetch("/ranking_data")
+                .then(r => r.json())
+                .then(data => {
+                    const table = document.getElementById("ranking");
+                    table.innerHTML = "<tr><th>Gruppe</th><th>Siege</th></tr>";
+                    data.forEach(([name, wins], i) => {
+                        let row = document.createElement("tr");
+                        if (i === 0) row.style.background = "#dff0d8"; // Top 1 grünlich
+                        row.innerHTML = `<td>${name}</td><td>${wins}</td>`;
+                        table.appendChild(row);
+                    });
+                });
+        }
+
+        // Live Update
+        const evtSource = new EventSource("/events");
+        evtSource.onmessage = function(e) {
+            if (e.data === "update") {
+                updateRanking();
+            }
+        };
+    </script>
+</body>
+</html>
