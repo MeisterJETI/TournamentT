@@ -28,14 +28,12 @@
         {% endfor %}
     </table>
 
+    <script src=""{{ url_for('static', filename='js/socket.io.min.js') }}"" crossorigin="anonymous"></script>
     <script>
-        // Live Update
-        const evtSource = new EventSource("/events");
-        evtSource.onmessage = function(e) {
-            if (e.data === "update") {
-                location.reload();
-            }
-        };
+        const socket = io();
+        socket.on("update", () => {
+            location.reload();
+        });
     </script>
 </body>
 </html>

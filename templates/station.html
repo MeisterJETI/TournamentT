@@ -3,50 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <title>Station {{ station }}</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1"> <!-- wichtig fürs Handy -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 10px;
-            background: #f9f9f9;
-        }
-        h2 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .match-card {
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-            margin-bottom: 15px;
-            padding: 15px;
-        }
-        .round {
-            font-weight: bold;
-            font-size: 1.1em;
-            margin-bottom: 10px;
-            text-align: center;
-        }
-        .fighters {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 10px;
-        }
-        .fighter {
-            flex: 1;
-            text-align: center;
-            font-size: 1.1em;
-        }
-        .checkbox {
-            flex: 0 0 50px;
-            display: flex;
-            justify-content: center;
-        }
-        input[type="checkbox"] {
-            width: 28px;
-            height: 28px;
-        }
+        body { font-family: Arial, sans-serif; margin: 10px; background: #f9f9f9; }
+        h2 { text-align: center; margin-bottom: 20px; }
+        .match-card { background: white; border-radius: 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.1); margin-bottom: 15px; padding: 15px; }
+        .round { font-weight: bold; font-size: 1.1em; margin-bottom: 10px; text-align: center; }
+        .fighters { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+        .fighter { flex: 1; text-align: center; font-size: 1.1em; }
+        .checkbox { flex: 0 0 50px; display: flex; justify-content: center; }
+        input[type="checkbox"] { width: 28px; height: 28px; }
     </style>
 </head>
 <body>
@@ -72,6 +38,7 @@
     </div>
     {% endfor %}
 
+    <script src=""{{ url_for('static', filename='js/socket.io.min.js') }}"" crossorigin="anonymous"></script>
     <script>
         const station = "{{ station }}";
         const checkboxes = document.querySelectorAll(".cb");
@@ -81,11 +48,8 @@
                 const round = cb.dataset.round;
                 const winner = cb.checked ? cb.dataset.winner : "";
 
-                // andere Checkbox derselben Runde deaktivieren
                 checkboxes.forEach(other => {
-                    if (other !== cb && other.dataset.round === round) {
-                        other.checked = false;
-                    }
+                    if (other !== cb && other.dataset.round === round) other.checked = false;
                 });
 
                 fetch("/update_winner", {
@@ -96,13 +60,10 @@
             });
         });
 
-        // Live Update
-        const evtSource = new EventSource("/events");
-        evtSource.onmessage = function(e) {
-            if (e.data === "update") {
-                location.reload();
-            }
-        };
+        const socket = io();
+        socket.on("update", () => {
+            location.reload();
+        });
     </script>
 </body>
 </html>
