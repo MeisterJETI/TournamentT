@@ -1,2 +1,2 @@
 # TournamentT
-a simple live scoreboard system made for my school
+This really simple and bare-bones live scoreboard system made for my school.
