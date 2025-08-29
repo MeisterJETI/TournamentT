@@ -5,22 +5,83 @@
     <title>Live Ranking</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; background: #f9f9f9; }
-        h2 { text-align: center; margin-bottom: 20px; }
-        table { width: 100%; border-collapse: collapse; background: white; }
-        th, td { padding: 12px; text-align: center; border-bottom: 1px solid #ddd; }
-        th { background: #eee; }
-        tr:first-child td { font-weight: bold; background: #dff0d8; } /* Spitzenreiter */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: #f5f5f5;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .ranking-container {
+            width: 90%;
+            max-width: 1200px;
+            background: #fff;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 2em;
+            color: #444;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 1.2em;
+        }
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background: #eee;
+            font-size: 1.3em;
+        }
+        tr:nth-child(odd) { background: #fafafa; }
+        tr:nth-child(even) { background: #f0f0f0; }
+        td.position {
+            width: 50px;
+            text-align: center;
+        }
+        td.wins {
+            text-align: center;
+            width: 80px;
+        }
+        /* Top 3 Farben */
+        tr.gold { background: #FFD700; font-weight: bold; }
+        tr.silver { background: #C0C0C0; font-weight: bold; }
+        tr.bronze { background: #CD7F32; font-weight: bold; }
+
+        @media (max-aspect-ratio: 16/9) {
+            table { font-size: 1em; }
+        }
     </style>
 </head>
 <body>
-    <h2>🏆 Live Ranking</h2>
-    <table id="ranking">
-        <tr><th>Gruppe</th><th>Siege</th></tr>
-        {% for name, wins in ranking %}
-        <tr><td>{{ name }}</td><td>{{ wins }}</td></tr>
-        {% endfor %}
-    </table>
+    <div class="ranking-container">
+        <h2>🏆 Live Ranking</h2>
+        <table id="ranking">
+            <tr>
+                <th>Platz</th>
+                <th>Gruppe</th>
+                <th>Siege</th>
+            </tr>
+            {% for entry in ranking %}
+            <tr class="{% if loop.index == 1 %}gold{% elif loop.index == 2 %}silver{% elif loop.index == 3 %}bronze{% endif %}">
+                <td class="position">{{ loop.index }}.</td>
+                <td>{{ entry[0] }}</td>
+                <td class="wins">{{ entry[1] }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
 
     <script>
         function updateRanking() {
@@ -28,22 +89,21 @@
                 .then(r => r.json())
                 .then(data => {
                     const table = document.getElementById("ranking");
-                    table.innerHTML = "<tr><th>Gruppe</th><th>Siege</th></tr>";
-                    data.forEach(([name, wins], i) => {
-                        let row = document.createElement("tr");
-                        if (i === 0) row.style.background = "#dff0d8"; // Top 1 grünlich
-                        row.innerHTML = `<td>${name}</td><td>${wins}</td>`;
+                    table.innerHTML = "<tr><th>Platz</th><th>Gruppe</th><th>Siege</th></tr>";
+                    data.forEach((entry, i) => {
+                        const row = document.createElement("tr");
+                        if (i === 0) row.className = "gold";
+                        else if (i === 1) row.className = "silver";
+                        else if (i === 2) row.className = "bronze";
+                        row.innerHTML = `<td class="position">${i+1}.</td><td>${entry[0]}</td><td class="wins">${entry[1]}</td>`;
                         table.appendChild(row);
                     });
                 });
         }
 
-        // Live Update
         const evtSource = new EventSource("/events");
         evtSource.onmessage = function(e) {
-            if (e.data === "update") {
-                updateRanking();
-            }
+            if (e.data === "update") updateRanking();
         };
     </script>
 </body>
