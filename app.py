@@ -15,7 +15,7 @@ def save_db(data):
 
 def calculate_ranking():
     db = load_db()
-    names = {x["Gruppe"]: x["Anzeigename"] for x in db["Anzeigenahmen"]}
+    names = {x["Gruppe"]: x["Anzeigename"] for x in db["AnzeigenahmenG"]}
     ranking = {g: 0 for g in names}
 
     for round_name, games in db.items():
@@ -54,7 +54,7 @@ def notify_all():
 def station_page(station):
     db = load_db()
     rounds = []
-    names = {x["Gruppe"]: x["Anzeigename"] for x in db["Anzeigenahmen"]}
+    names = {x["Gruppe"]: x["Anzeigename"] for x in db["AnzeigenahmenG"]}
 
     for round_name, games in db.items():
         if not round_name.startswith("Round"):
@@ -147,7 +147,7 @@ def group_page(group_id):
 def index():
     db = load_db()
     # Anzeigenamen für Gruppen
-    groups = [(g["Gruppe"], g["Anzeigename"]) for g in db["Anzeigenahmen"]]
+    groups = [(g["Gruppe"], g["Anzeigename"]) for g in db["AnzeigenahmenG"]]
     # Anzeigenamen für Stationen
     stations = [(s["Station"], s["Anzeigename"]) for s in db.get("AnzeigenahmenS", [])]
     return render_template("index.html", groups=groups, stations=stations)
