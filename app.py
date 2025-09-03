@@ -1,9 +1,7 @@
-from flask import Flask, render_template, request, jsonify
-from flask_socketio import SocketIO, emit
-import json
+from flask import Flask, render_template, request, jsonify, Response
+import json, threading
 
 app = Flask(__name__)
-socketio = SocketIO(app, cors_allowed_origins="*")  # CORS für alle erlaubt
 DB_FILE = "database.json"
 
 # --- Hilfsfunktionen ---
@@ -27,18 +25,31 @@ def calculate_ranking():
             if g["winner"]:
                 ranking[g["winner"]] += 1
 
+    # Liste sortieren (meiste Siege oben)
     ranking_list = sorted(ranking.items(), key=lambda x: x[1], reverse=True)
+    # Anzeigenamen einsetzen
     ranking_list = [(names[g], wins) for g, wins in ranking_list]
     return ranking_list
 
-# --- Routen ---
-@app.route("/")
-def index():
-    db = load_db()
-    groups = [(g["Gruppe"], g["Anzeigename"]) for g in db["AnzeigenahmenG"]]
-    stations = [(s["Station"], s["Anzeigename"]) for s in db.get("AnzeigenahmenS", [])]
-    return render_template("index.html", groups=groups, stations=stations)
+# --- SSE Broadcasting ---
+listeners = []
 
+def event_stream():
+    q = threading.Event()
+    listeners.append(q)
+    try:
+        while True:
+            q.wait()
+            q.clear()
+            yield f"data: update\n\n"
+    finally:
+        listeners.remove(q)
+
+def notify_all():
+    for l in listeners:
+        l.set()
+
+# --- Routen ---
 @app.route("/station/<station>")
 def station_page(station):
     db = load_db()
@@ -79,8 +90,7 @@ def update_winner():
             break
 
     save_db(db)
-    # Broadcast via Socket.IO an alle Clients
-    socketio.emit("update")
+    notify_all()
     return jsonify(success=True)
 
 @app.route("/ranking")
@@ -90,11 +100,17 @@ def ranking_page():
 
 @app.route("/ranking_data")
 def ranking_data():
+    # Liefert Ranking als JSON für Ajax
     return jsonify(calculate_ranking())
+
+@app.route("/events")
+def events():
+    return Response(event_stream(), mimetype="text/event-stream")
 
 @app.route("/group/<group_id>")
 def group_page(group_id):
     db = load_db()
+    # Anzeigenamen für Gruppen und Stationen
     group_names = {x["Gruppe"]: x["Anzeigename"] for x in db["AnzeigenahmenG"]}
     station_names = {x["Station"]: x["Anzeigename"] for x in db["AnzeigenahmenS"]}
 
@@ -127,11 +143,14 @@ def group_page(group_id):
 
     return render_template("group.html", group_name=group_name, history=history)
 
-# --- Socket.IO Events ---
-@socketio.on('connect')
-def on_connect():
-    print("Client verbunden")
+@app.route("/")
+def index():
+    db = load_db()
+    # Anzeigenamen für Gruppen
+    groups = [(g["Gruppe"], g["Anzeigename"]) for g in db["AnzeigenahmenG"]]
+    # Anzeigenamen für Stationen
+    stations = [(s["Station"], s["Anzeigename"]) for s in db.get("AnzeigenahmenS", [])]
+    return render_template("index.html", groups=groups, stations=stations)
 
-# --- Start ---
 if __name__ == "__main__":
-    socketio.run(app, host="0.0.0.0", port=5000, debug=True)
+    app.run(debug=True, threaded=True, host="0.0.0.0")
