@@ -143,6 +143,17 @@ def group_page(group_id):
 
     return render_template("group.html", group_name=group_name, history=history)
 
+@app.route("/get_station_state/<station>")
+def get_station_state(station):
+    db = load_db()
+    state = {}
+    for round_name in [f"Round {i}" for i in range(1,7)]:
+        for game in db[round_name]:
+            if game["Station"] == station:
+                state[round_name] = game["winner"]
+    return jsonify(state)
+
+
 @app.route("/")
 def index():
     db = load_db()
