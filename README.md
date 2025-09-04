@@ -10,7 +10,7 @@ Es ermöglicht die Anzeige von Teams, Stationen und Rankings in Echtzeit.
 - Anzeigenamen der Gruppen kann geändert werden (z.B. von Gruppe A zu Team Elefant)
 - Database die alles speichert, falls System ausfällt/abstürzt.
 - Nach ausfall läd das Programm die Database automatisch.
-- Dank sockit.io ist das system EXTREMST schnell und zuverlässig (keine Wartezeit spürbar).
+- Dank socket.io ist das system EXTREMST schnell und zuverlässig (keine Wartezeit spürbar).
 
 ---
 
