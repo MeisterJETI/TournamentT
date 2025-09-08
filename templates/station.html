@@ -71,6 +71,32 @@
         </div>
     </div>
     {% endfor %}
+	
+<div style="margin-top:30px; text-align:center; font-family:Arial, sans-serif;">
+    <h3 style="margin-bottom:15px; color:#333;">⏱ Stations-Timer</h3>
+    
+    <div style="display:inline-flex; gap:10px; align-items:center; margin-bottom:15px;">
+        <input type="number" id="minutes" placeholder="Minuten" min="0"
+               style="width:70px; padding:8px; border-radius:5px; border:1px solid #ccc; text-align:center;">
+        <span style="font-size:18px;">:</span>
+        <input type="number" id="seconds" placeholder="Sekunden" min="0" max="59"
+               style="width:70px; padding:8px; border-radius:5px; border:1px solid #ccc; text-align:center;">
+    </div>
+    
+    <div style="display:inline-flex; gap:10px; margin-bottom:20px;">
+        <button id="startTimerBtn" 
+                style="padding:10px 20px; border:none; border-radius:5px; background-color:#4CAF50; color:white; font-weight:bold; cursor:pointer;">
+            Start
+        </button>
+        <button id="resetTimerBtn" 
+                style="padding:10px 20px; border:none; border-radius:5px; background-color:#f44336; color:white; font-weight:bold; cursor:pointer;">
+            Reset
+        </button>
+    </div>
+    
+    <h2 id="timerDisplay" style="font-size:36px; color:#555; letter-spacing:2px;">00:00</h2>
+</div>
+
 
     <script>
         const station = "{{ station }}";
@@ -108,5 +134,59 @@
 			evtSource.close();
 		});
     </script>
+<script>
+const timerDisplay = document.getElementById("timerDisplay");
+const startTimerBtn = document.getElementById("startTimerBtn");
+const resetTimerBtn = document.getElementById("resetTimerBtn");
+
+let timerInterval = null;
+
+// Timer vom Server abrufen
+async function fetchTimer() {
+    try {
+        const res = await fetch(`/get_timer/${station}`);
+        const data = await res.json();
+
+        if (!data.running) {
+            timerDisplay.textContent = "00:00";
+            return;
+        }
+
+        const remaining = data.remaining;
+        const minutes = String(Math.floor(remaining / 60)).padStart(2, "0");
+        const seconds = String(remaining % 60).padStart(2, "0");
+        timerDisplay.textContent = `${minutes}:${seconds}`;
+    } catch (err) {
+        console.error("Fehler beim Timer:", err);
+    }
+}
+
+// Timer starten
+startTimerBtn.addEventListener("click", async () => {
+    const minutes = document.getElementById("minutes").value || 0;
+    const seconds = document.getElementById("seconds").value || 0;
+
+    await fetch("/start_timer", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({station, minutes, seconds})
+    });
+
+    fetchTimer(); // sofort updaten
+});
+
+// Timer resetten
+resetTimerBtn.addEventListener("click", async () => {
+    await fetch("/reset_timer", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({station})
+    });
+    timerDisplay.textContent = "00:00"; // sofort im Frontend zurücksetzen
+});
+
+// Alle 1s Timer syncen
+timerInterval = setInterval(fetchTimer, 1000);
+</script>
 </body>
 </html>
