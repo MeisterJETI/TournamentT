@@ -4,7 +4,7 @@ import json, threading
 app = Flask(__name__)
 DB_FILE = "database.json"
 
-# --- Hilfsfunktionen ---
+#Hilfsfunktionen
 def load_db():
     with open(DB_FILE, "r", encoding="utf-8") as f:
         return json.load(f)
@@ -31,7 +31,7 @@ def calculate_ranking():
     ranking_list = [(names[g], wins) for g, wins in ranking_list]
     return ranking_list
 
-# --- SSE Broadcasting ---
+#SSE Broadcasting
 listeners = []
 
 def event_stream():
@@ -49,7 +49,7 @@ def notify_all():
     for l in listeners:
         l.set()
 
-# --- Routen ---
+#Routen
 @app.route("/station/<station>")
 def station_page(station):
     db = load_db()
@@ -162,6 +162,71 @@ def index():
     # Anzeigenamen für Stationen
     stations = [(s["Station"], s["Anzeigename"]) for s in db.get("AnzeigenahmenS", [])]
     return render_template("index.html", groups=groups, stations=stations)
+
+import time
+
+@app.route("/start_timer", methods=["POST"])
+def start_timer():
+    data = request.get_json()
+    station = data["station"]
+    minutes = int(data.get("minutes", 0))
+    seconds = int(data.get("seconds", 0))
+    duration = minutes * 60 + seconds
+
+    db = load_db()
+    if "Timers" not in db:
+        db["Timers"] = {}
+
+    db["Timers"][station] = {
+        "duration": duration,
+        "start_time": time.time(),
+        "running": True
+    }
+    save_db(db)
+
+    return jsonify(success=True)
+
+
+@app.route("/get_timer/<station>")
+def get_timer(station):
+    db = load_db()
+    timers = db.get("Timers", {})
+    timer = timers.get(station)
+
+    if not timer or not timer.get("running", False):
+        return jsonify(remaining=0, running=False)
+
+    # Sicherheitsprüfung: start_time und duration existieren
+    start_time = timer.get("start_time")
+    duration = timer.get("duration", 0)
+
+    if start_time is None:
+        return jsonify(remaining=0, running=False)
+
+    elapsed = int(time.time() - start_time)
+    remaining = max(0, duration - elapsed)
+
+    # Timer automatisch stoppen, wenn fertig
+    if remaining == 0:
+        timer["running"] = False
+        save_db(db)
+
+    return jsonify(remaining=remaining, running=timer["running"])
+
+@app.route("/reset_timer", methods=["POST"])
+def reset_timer():
+    data = request.get_json()
+    station = data["station"]
+
+    db = load_db()
+    if "Timers" in db and station in db["Timers"]:
+        db["Timers"][station]["running"] = False
+        db["Timers"][station]["duration"] = 0
+        db["Timers"][station]["start_time"] = None
+        save_db(db)
+
+    return jsonify(success=True)
+
 
 if __name__ == "__main__":
     app.run(debug=True, threaded=True, host="0.0.0.0")

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Station {{ station }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"> <!-- wichtig fürs Handy -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 10px;
+            background: #f9f9f9;
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .match-card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            margin-bottom: 15px;
+            padding: 15px;
+        }
+        .round {
+            font-weight: bold;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .fighters {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+        .fighter {
+            flex: 1;
+            text-align: center;
+            font-size: 1.1em;
+        }
+        .checkbox {
+            flex: 0 0 50px;
+            display: flex;
+            justify-content: center;
+        }
+        input[type="checkbox"] {
+            width: 28px;
+            height: 28px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Station {{ station }}</h2>
+
+    {% for r in rounds %}
+    <div class="match-card">
+        <div class="round">{{ r.round }}</div>
+        <div class="fighters">
+            <div class="fighter">{{ r.f1 }}</div>
+            <div class="checkbox">
+                <input type="checkbox" class="cb"
+                       data-round="{{ r.round }}" data-winner="{{ r.match.fighter1 }}"
+                       {% if r.match.winner == r.match.fighter1 %}checked{% endif %}>
+            </div>
+            <div class="checkbox">
+                <input type="checkbox" class="cb"
+                       data-round="{{ r.round }}" data-winner="{{ r.match.fighter2 }}"
+                       {% if r.match.winner == r.match.fighter2 %}checked{% endif %}>
+            </div>
+            <div class="fighter">{{ r.f2 }}</div>
+        </div>
+    </div>
+    {% endfor %}
+	
+<div style="margin-top:30px; text-align:center; font-family:Arial, sans-serif;">
+    <h3 style="margin-bottom:15px; color:#333;">⏱ Stations-Timer</h3>
+    
+    <div style="display:inline-flex; gap:10px; align-items:center; margin-bottom:15px;">
+        <input type="number" id="minutes" placeholder="Minuten" min="0"
+               style="width:70px; padding:8px; border-radius:5px; border:1px solid #ccc; text-align:center;">
+        <span style="font-size:18px;">:</span>
+        <input type="number" id="seconds" placeholder="Sekunden" min="0" max="59"
+               style="width:70px; padding:8px; border-radius:5px; border:1px solid #ccc; text-align:center;">
+    </div>
+    
+    <div style="display:inline-flex; gap:10px; margin-bottom:20px;">
+        <button id="startTimerBtn" 
+                style="padding:10px 20px; border:none; border-radius:5px; background-color:#4CAF50; color:white; font-weight:bold; cursor:pointer;">
+            Start
+        </button>
+        <button id="resetTimerBtn" 
+                style="padding:10px 20px; border:none; border-radius:5px; background-color:#f44336; color:white; font-weight:bold; cursor:pointer;">
+            Reset
+        </button>
+    </div>
+    
+    <h2 id="timerDisplay" style="font-size:36px; color:#555; letter-spacing:2px;">00:00</h2>
+</div>
+
+
+    <script>
+        const station = "{{ station }}";
+        const checkboxes = document.querySelectorAll(".cb");
+
+        checkboxes.forEach(cb => {
+            cb.addEventListener("change", () => {
+                const round = cb.dataset.round;
+                const winner = cb.checked ? cb.dataset.winner : "";
+
+                // andere Checkbox derselben Runde deaktivieren
+                checkboxes.forEach(other => {
+                    if (other !== cb && other.dataset.round === round) {
+                        other.checked = false;
+                    }
+                });
+
+                fetch("/update_winner", {
+                    method: "POST",
+                    headers: {"Content-Type": "application/json"},
+                    body: JSON.stringify({station, round, winner})
+                });
+            });
+        });
+
+        // Live Update
+        const evtSource = new EventSource("/events");
+        evtSource.onmessage = function(e) {
+            if (e.data === "update") {
+                location.reload();
+            }
+        };
+		
+		window.addEventListener("beforeunload", () => {
+			evtSource.close();
+		});
+    </script>
+<script>
+const timerDisplay = document.getElementById("timerDisplay");
+const startTimerBtn = document.getElementById("startTimerBtn");
+const resetTimerBtn = document.getElementById("resetTimerBtn");
+
+let timerInterval = null;
+
+// Timer vom Server abrufen
+async function fetchTimer() {
+    try {
+        const res = await fetch(`/get_timer/${station}`);
+        const data = await res.json();
+
+        if (!data.running) {
+            timerDisplay.textContent = "00:00";
+            return;
+        }
+
+        const remaining = data.remaining;
+        const minutes = String(Math.floor(remaining / 60)).padStart(2, "0");
+        const seconds = String(remaining % 60).padStart(2, "0");
+        timerDisplay.textContent = `${minutes}:${seconds}`;
+    } catch (err) {
+        console.error("Fehler beim Timer:", err);
+    }
+}
+
+// Timer starten
+startTimerBtn.addEventListener("click", async () => {
+    const minutes = document.getElementById("minutes").value || 0;
+    const seconds = document.getElementById("seconds").value || 0;
+
+    await fetch("/start_timer", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({station, minutes, seconds})
+    });
+
+    fetchTimer(); // sofort updaten
+});
+
+// Timer resetten
+resetTimerBtn.addEventListener("click", async () => {
+    await fetch("/reset_timer", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({station})
+    });
+    timerDisplay.textContent = "00:00"; // sofort im Frontend zurücksetzen
+});
+
+// Alle 1s Timer syncen
+timerInterval = setInterval(fetchTimer, 1000);
+</script>
+</body>
+</html>
