@@ -1,46 +1,40 @@
-# TournamentT
+# 🏆 TournamentT
 
-**TournamentT** ist ein einfaches Live-Scoreboard-System, das ich für meine Schule entwickelt habe.  
-Es ermöglicht die Anzeige von Teams, Stationen und Rankings in Echtzeit.
+**TournamentT** ist ein leichtgewichtiges Live-Scoreboard-System, das ich für meine Schule entwickelt habe.  
+Es zeigt Teams, Stationen und Rankings **in Echtzeit** an – perfekt für Turniere, Wettbewerbe oder Schulprojekte.  
 
 ---
 
-## Features
-- Live-Scoreboard
-- Anzeigenamen der Gruppen kann geändert werden (z.B. von Gruppe A zu Team Elefant)
-- Database die alles speichert, falls System ausfällt/abstürzt.
-- Nach ausfall läd das Programm die Database automatisch.
-- Dank socket.io ist das system EXTREMST schnell und zuverlässig (keine Wartezeit spürbar).
+## ✨ Features
+- **Live-Scoreboard** (aktuell deaktiviert, damit es sich nicht zu sehr nach Wettkampf anfühlt)  
+- **Gruppennamen anpassen** – von „Gruppe Grün“ zu „Team Elefant“  
+- **Persistente Datenbank**, die alles speichert, falls das System abstürzt  
+- **Automatisches Wiederherstellen** der Datenbank nach einem Ausfall  
+- **Tablet-optimiert** – funktioniert auch ohne Internet  
+- **Synchronisierter Timer** an jeder Station, abgesichert durch die Datenbank  
 
 ---
 
 ## Inhaltsverzeichnis
-Hier ist das Inhaltsverzeichnis für alle Links:
+Der Überblick über alle Ansichten:
 
-![Inhaltsverzeichnis](https://github.com/user-attachments/assets/06be81f3-5e45-4df5-958f-dc15a2968229)
-
----
-
-## Stationen
-Hier ist die Ansicht für "Aufseher" an den Stationen:
-
-![Station](https://github.com/user-attachments/assets/f969bbff-fbc6-4107-9014-17aaaf227480)
+<img width="2360" height="1640" alt="localhost_5000_(iPad Air)" src="https://github.com/user-attachments/assets/d3af835a-90a2-4837-a5a5-fafbb6c384c9" />
 
 ---
 
-## Gruppen
+## 🏁 Stationen
+So sieht die Ansicht für die Aufsicht an den Stationen aus:
+
+<img width="2048" height="2732" alt="localhost_5000_station_S1(iPad Pro) (1)" src="https://github.com/user-attachments/assets/dd15b1e4-3c14-4de6-9dbd-7758cb45e929" />
+
+---
+
+## 👥 Gruppen
 Hier wird der Fortschritt der eigenen Gruppe angezeigt:
 
-![Gruppe](https://github.com/user-attachments/assets/81c01851-3749-49ee-9087-f8187c9da45a)
-
----
-
-## Ranking
-Das Ranking zeigt die aktuelle Punkteverteilung und Platzierungen aller Teams:
-
-![Ranking](https://github.com/user-attachments/assets/7ac87873-bd2c-4fbf-8421-264ea20e260f)
+<img width="1640" height="2360" alt="localhost_5000_group_G2(iPad Air)" src="https://github.com/user-attachments/assets/1b7a8732-ad60-4143-9243-396a194282aa" />
 
 ---
 
 ## Lizenz
-Mach mit dem Code was auch immer du willst! Credit wär cool, aber nicht notwendig.
+Mach mit dem Code, was du willst! Ein kleiner Hinweis auf mich wäre nett, ist aber **nicht erforderlich**.  
