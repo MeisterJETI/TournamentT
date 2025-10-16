@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{% block title %}{% endblock %}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background: #f9f9f9;
+        }
+
+        h1, h2 {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .section {
+            margin-bottom: 30px;
+        }
+
+        .links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .links a {
+            display: block;
+            padding: 12px 20px;
+            background: #007BFF;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: bold;
+            text-align: center;
+            min-width: 120px;
+        }
+
+        .links a:hover {
+            background: #0056b3;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            color: #666;
+        }
+
+        /* 💬 Admin Balken unten */
+        #adminBar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: linear-gradient(90deg, #007bff, #00bfff);
+            color: white;
+            padding: 12px 20px;
+            font-size: 1.2em;
+            font-weight: bold;
+            text-align: center;
+            display: none;
+            z-index: 1000;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Kleine Geräte */
+        @media (max-width: 600px) {
+            #adminBar {
+                font-size: 1em;
+                padding: 10px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    {% block content %}{% endblock %}
+
+    <footer>
+        by MeisterJETI
+    </footer>
+
+    <!-- 💬 Admin Nachricht Balken -->
+    <div id="adminBar"></div>
+
+    <script>
+        async function checkAdminMessage() {
+            try {
+                const res = await fetch("/admin_message");
+                const data = await res.json();
+                const bar = document.getElementById("adminBar");
+
+                if (data.message && data.message.trim() !== "") {
+                    bar.textContent = data.message;
+                    bar.style.display = "block";
+                } else {
+                    bar.style.display = "none";
+                }
+            } catch (err) {
+                console.error("Fehler beim Laden der Admin-Nachricht:", err);
+            }
+        }
+
+        // Alle 5 Sekunden aktualisieren
+        checkAdminMessage();
+        setInterval(checkAdminMessage, 5000);
+    </script>
+</body>
+</html>
