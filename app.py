@@ -227,6 +227,11 @@ def reset_timer():
 
     return jsonify(success=True)
 
+@app.route("/admin_message")
+def admin_message():
+    db = load_db()
+    message = db.get("AdminMessage", "")
+    return jsonify({"message": message})
 
 if __name__ == "__main__":
     app.run(debug=True, threaded=True, host="0.0.0.0")
