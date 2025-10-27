@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Turniersystem{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding-bottom: 60px; /* Platz für Balken unten */
+            background: #f5f5f5;
+        }
+
+        header {
+            background: #007BFF;
+            color: white;
+            padding: 10px 15px;
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        main {
+            padding: 15px;
+        }
+
+        /* Admin-Nachrichtenbalken */
+		#adminBar {
+			position: fixed;
+			bottom: 0;
+			left: 0;
+			width: 100%;
+			background: linear-gradient(90deg, #FFD700, #FFA500);
+			color: black;
+			text-align: center;
+			font-weight: bold;
+			font-size: 1.1em;
+			padding: 10px 0;
+			display: none;
+			box-shadow: 0 -2px 8px rgba(0,0,0,0.2);
+			z-index: 9999;
+		}
+    </style>
+</head>
+<body>
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Admin-Balken -->
+    <div id="adminBar"></div>
+
+    <script>
+        async function checkAdminMessage() {
+            try {
+                const res = await fetch("/admin_message");
+                const data = await res.json();
+                const bar = document.getElementById("adminBar");
+
+                if (data.message && data.message.trim() !== "") {
+                    bar.textContent = data.message;
+                    bar.style.display = "block";
+                    localStorage.setItem("adminMessage", data.message);
+                } else {
+                    bar.style.display = "none";
+                    localStorage.removeItem("adminMessage");
+                }
+            } catch (err) {
+                console.error("Fehler beim Laden der Admin-Nachricht:", err);
+            }
+        }
+
+        // Beim Laden zuerst letzte Nachricht aus dem LocalStorage anzeigen
+        document.addEventListener("DOMContentLoaded", () => {
+            const savedMsg = localStorage.getItem("adminMessage");
+            const bar = document.getElementById("adminBar");
+            if (savedMsg) {
+                bar.textContent = savedMsg;
+                bar.style.display = "block";
+            }
+
+            // Sofort prüfen & dann regelmäßig aktualisieren
+            checkAdminMessage();
+            setInterval(checkAdminMessage, 5000);
+        });
+    </script>
+</body>
+</html>
