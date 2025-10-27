@@ -160,6 +160,7 @@ async function fetchTimer() {
         const minutes = String(Math.floor(remaining / 60)).padStart(2, "0");
         const seconds = String(remaining % 60).padStart(2, "0");
         timerDisplay.textContent = `${minutes}:${seconds}`;
+		localStorage.setItem("remainingTime", remaining);
     } catch (err) {
         console.error("Fehler beim Timer:", err);
     }
@@ -189,9 +190,17 @@ resetTimerBtn.addEventListener("click", async () => {
     timerDisplay.textContent = "00:00"; // sofort im Frontend zurücksetzen
 });
 
+document.addEventListener("DOMContentLoaded", () => {
+    const remaining = parseInt(localStorage.getItem("remainingTime")) || 0;
+    const minutes = Math.floor(remaining / 60).toString().padStart(2, "0");
+    const seconds = (remaining % 60).toString().padStart(2, "0");
+    timerDisplay.textContent = `${minutes}:${seconds}`;
+});
+
 // Alle 1s Timer syncen
 timerInterval = setInterval(fetchTimer, 1000);
 </script>
 </body>
 </html>
+
 {% endblock %}
