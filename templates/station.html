@@ -195,6 +195,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const minutes = Math.floor(remaining / 60).toString().padStart(2, "0");
     const seconds = (remaining % 60).toString().padStart(2, "0");
     timerDisplay.textContent = `${minutes}:${seconds}`;
+	localStorage.setItem("remainingTime", 0);
 });
 
 // Alle 1s Timer syncen
@@ -204,3 +205,4 @@ timerInterval = setInterval(fetchTimer, 1000);
 </html>
 
 {% endblock %}
+
