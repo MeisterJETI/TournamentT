@@ -510,7 +510,7 @@
         },
         {
             "Gruppe": "G2",
-            "Anzeigename": "Gruppe Gr\u00fcn"
+            "Anzeigename": "Gruppe Grün"
         },
         {
             "Gruppe": "G3",
@@ -538,7 +538,7 @@
         },
         {
             "Gruppe": "G9",
-            "Anzeigename": "Gruppe T\u00fcrkis"
+            "Anzeigename": "Gruppe Türkis"
         },
         {
             "Gruppe": "G10",
@@ -548,7 +548,7 @@
     "AnzeigenahmenS": [
         {
             "Station": "S1",
-            "Anzeigename": "V\u00f6lkerball"
+            "Anzeigename": "Völkerball"
         },
         {
             "Station": "S2",
@@ -570,6 +570,6 @@
             "Station": "S6",
             "Anzeigename": "Kreativ"
         }
-    ]
+    ],
     "AdminMessage": "Wilkommen beim Tunier! Wir starten in 10 Minuten."
 }
